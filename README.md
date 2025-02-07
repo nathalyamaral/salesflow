@@ -1,66 +1,129 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# README - SalesFlow
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 🚀 Sobre o Projeto
+SalesFlow é uma API desenvolvida em **Laravel**, utilizando a arquitetura **DDD + Hexagonal**, seguindo **PSR-1 e PSR-12**, **Clean Code**, **SOLID**, com ambiente totalmente **Dockerizado** e testes automatizados com **PHPUnit + Code Coverage**.
 
-## About Laravel
+## 📦 Tecnologias Utilizadas
+- **Laravel 10** (Framework PHP)
+- **Docker + Docker Compose** (Ambiente isolado)
+- **MySQL 8** (Banco de Dados)
+- **MailHog** (Teste de e-mails)
+- **PHPUnit + Pest** (Testes automatizados)
+- **PHPStan + PHP-CS-Fixer** (Análise estática e formatação de código)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🔧 Instalação e Configuração
+### **1️⃣ Pré-requisitos**
+Antes de começar, certifique-se de ter instalado:
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+- [Git](https://git-scm.com/)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### **2️⃣ Clonar o repositório**
+```bash
+git clone SEU_REPOSITORIO.git
+cd salesflow
+```
 
-## Learning Laravel
+### **3️⃣ Executar o Setup**
+O projeto possui um **script automatizado** para instalação e configuração:
+```bash
+chmod +x setup
+./setup
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Isso fará:
+✅ Subir os containers Docker.
+✅ Instalar as dependências do Laravel.
+✅ Criar o banco de dados e rodar migrações.
+✅ Gerar a chave de aplicação e limpar o cache.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🚀 Executando o Projeto
+Após rodar o `setup`, a API estará disponível em:
+🔗 **http://localhost:8000**
 
-## Laravel Sponsors
+📬 **Mailhog (Testar e-mails)**: [http://localhost:8025](http://localhost:8025)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## 🔍 Rodando Testes e Code Coverage
+Para rodar os testes e gerar o relatório de cobertura de código:
+```bash
+docker exec -it salesflow_app php artisan test --coverage-html=storage/coverage
+```
+Acesse o relatório gerado:
+```bash
+xdg-open storage/coverage/index.html # Para Linux
+open storage/coverage/index.html     # Para macOS
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+---
 
-## Contributing
+## 📜 Estrutura do Projeto (DDD + Hexagonal)
+```
+app/
+├── Application/        # Casos de uso e regras de aplicação
+│   ├── UseCases/
+│   ├── DTOs/
+│   ├── Services/
+│
+├── Domain/             # Entidades e lógica de negócio
+│   ├── Entities/
+│   ├── Repositories/
+│   ├── ValueObjects/
+│
+├── Infrastructure/     # Comunicação externa (DB, Email, Framework)
+│   ├── Persistence/
+│   ├── Mail/
+│   ├── Framework/
+│
+├── Tests/              # Testes unitários e integração
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## 🛠️ Troubleshooting
+Caso o projeto não inicie corretamente, tente:
+```bash
+docker-compose down -v
+./setup
+```
+Se ainda houver problemas, rode manualmente:
+```bash
+docker exec -it salesflow_app php artisan config:clear
+docker exec -it salesflow_app php artisan cache:clear
+docker exec -it salesflow_app php artisan migrate --seed
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 📌 Configuração Manual (Caso necessário)
+### Criar banco de dados manualmente
+Se o banco não for criado automaticamente:
+```bash
+docker exec -it salesflow_db mysql -u root -proot -e "CREATE DATABASE salesflow;"
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Rodar migrações manualmente
+```bash
+docker exec -it salesflow_app php artisan migrate --seed
+```
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 📄 Licença
+Este projeto está sob a licença MIT. Sinta-se livre para utilizá-lo e contribuir! 😊
+
+---
+
+## 🔥 Contato
+📧 Email: nathalyamaral07@gmail.com
+💼 LinkedIn: [nathaly](https://linkedin.com/in/nathalyamaral)
+
+---
+
+## 🚀 Autor
+👩‍💻 Nome do Desenvolvedor - [GitHub](https://github.com/nathalyamaral)
