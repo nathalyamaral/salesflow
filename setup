@@ -1,0 +1,20 @@
+#!/bin/bash
+
+echo "🚀 Iniciando configuração do ambiente Laravel..."
+
+# Subindo os containers Docker
+echo "🔧 Criando e subindo containers..."
+docker-compose up --build -d
+
+# Configuração do Laravel
+echo "🔧 Configurando Laravel..."
+docker exec -it salesflow_php cp .env.example .env
+docker exec -it salesflow_php composer install
+docker exec -it salesflow_php php artisan key:generate
+docker exec -it salesflow_php php artisan migrate --seed
+docker exec -it salesflow_php php artisan storage:link
+docker exec -it salesflow_php php artisan cache:clear
+
+echo "✅ Ambiente configurado com sucesso!"
+echo "🌐 Acesse a API em: http://localhost:8000"
+echo "📬 Mailhog disponível em: http://localhost:8025"

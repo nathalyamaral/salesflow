@@ -1,0 +1,15 @@
+/node_modules
+npm-debug.log
+/public/storage
+/storage/*.key
+/vendor
+/.idea
+.env
+resources/assets/js/config.js
+resources/assets/js/app-compiled.js
+resources/assets/js/app-compiled.js.map
+storage/exports/*
+storage/framework/*
+storage/accesstage-local/*
+.phpintel/
+tests/cover/*

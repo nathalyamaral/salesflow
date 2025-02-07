@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+cmd=$@
+echo "" > var/log/test.log
+./bash "./vendor/bin/phpunit --no-coverage --colors=always $cmd"

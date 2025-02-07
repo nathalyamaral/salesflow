@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+cmd=$@
+./composer "test-build-database"
+./bash "./vendor/bin/phpunit $cmd --testsuite=ci-coverage --colors=always"

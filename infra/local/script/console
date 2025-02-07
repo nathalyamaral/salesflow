@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+cmd=$@
+./bash "php bin/console $cmd"
