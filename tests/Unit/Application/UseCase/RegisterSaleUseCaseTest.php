@@ -2,12 +2,19 @@
 
 namespace Tests\Unit\Application\UseCase;
 
+use Application\UseCases\RegisterSaleUseCase;
+use Domain\Entities\Sale;
+use Domain\Entities\Seller;
+use Domain\Repositories\SaleRepositoryInterface;
+use Domain\Repositories\SellerRepositoryInterface;
+use PHPUnit\Framework\TestCase;
+
 /**
  * Unit tests for RegisterSaleUseCase.
  */
 class RegisterSaleUseCaseTest extends TestCase
 {
-    public function registerSale(): void
+    public function testRegisterSale(): void
     {
         $seller = new Seller(1, 'Fulano Tal', 'fulano@example.com');
 

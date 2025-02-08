@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SellerTest extends TestCase
 {
-    public function createSeller(): void
+    public function testCreateSeller(): void
     {
         $seller = new Seller(1, 'Fulano Tal', 'fulano@example.com', 100.0);
 

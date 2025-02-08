@@ -2,12 +2,17 @@
 
 namespace Tests\Unit\Application\UseCase;
 
+use Application\UseCases\RegisterSellerUseCase;
+use Domain\Entities\Seller;
+use Domain\Repositories\SellerRepositoryInterface;
+use PHPUnit\Framework\TestCase;
+
 /**
  * Unit tests for RegisterSellerUseCase.
  */
 class RegisterSellerUseCaseTest extends TestCase
 {
-    public function registerSeller(): void
+    public function testRegisterSeller(): void
     {
         $repository = $this->createMock(SellerRepositoryInterface::class);
         $repository->expects($this->once())
@@ -18,7 +23,7 @@ class RegisterSellerUseCaseTest extends TestCase
         $seller = $useCase->execute('Fulano Tal', 'fulano@example.com');
 
         $this->assertInstanceOf(Seller::class, $seller);
-        $this->assertEquals('Fulano Tale', $seller->getName());
+        $this->assertEquals('Fulano Tal', $seller->getName());
         $this->assertEquals('fulano@example.com', $seller->getEmail());
     }
 }

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RegisterSellerRequest;
+use App\Http\Resources\SellerResource;
 use Application\UseCases\RegisterSellerUseCase;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Controllers\Controller;
 
 /**
  * Controller for managing sellers.
@@ -22,18 +24,16 @@ class SellerController extends Controller
     /**
      * Registers a new seller.
      *
-     * @param Request $request
+     * @param RegisterSellerRequest $request
      * @return JsonResponse
      */
-    public function store(Request $request): JsonResponse
+    public function store(RegisterSellerRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:sellers,email',
-        ]);
+        $seller = $this->registerSellerUseCase->execute(
+            $request->validated()['name'],
+            $request->validated()['email']
+        );
 
-        $seller = $this->registerSellerUseCase->execute($validated['name'], $validated['email']);
-
-        return response()->json($seller, Response::HTTP_CREATED);
+        return response()->json(new SellerResource($seller), Response::HTTP_CREATED);
     }
 }

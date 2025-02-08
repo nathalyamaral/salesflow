@@ -5,7 +5,6 @@ namespace Tests\Feature\Http\Resources;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-
 /**
  * Feature tests for Seller API.
  */
@@ -13,9 +12,10 @@ class SellerApiTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function registerSeller(): void
+    public function testRegisterSeller(): void
     {
         $response = $this->postJson('/api/sellers', [
+            'id' => 1,
             'name' => 'Fulano Tal',
             'email' => 'fulano@example.com'
         ]);

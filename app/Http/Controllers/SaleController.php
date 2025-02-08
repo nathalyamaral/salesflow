@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RegisterSaleRequest;
+use App\Http\Resources\SaleResource;
 use Application\UseCases\RegisterSaleUseCase;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -20,18 +21,17 @@ class SaleController extends Controller
     /**
      * Registers a new sale.
      *
-     * @param Request $request
+     * @param RegisterSaleRequest $request
      * @return JsonResponse
+     * @throws \Exception
      */
-    public function store(Request $request): JsonResponse
+    public function store(RegisterSaleRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'seller_email' => 'required|email|exists:sellers,email',
-            'amount' => 'required|numeric|min:0.01',
-        ]);
+        $sale = $this->registerSaleUseCase->execute(
+            $request->validated()['seller_email'],
+            $request->validated()['amount']
+        );
 
-        $sale = $this->registerSaleUseCase->execute($validated['seller_email'], $validated['amount']);
-
-        return response()->json($sale, Response::HTTP_CREATED);
+        return response()->json(new SaleResource($sale), Response::HTTP_CREATED);
     }
 }

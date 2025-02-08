@@ -2,6 +2,8 @@
 
 namespace Domain\Repositories;
 
+use Domain\Entities\Seller;
+
 /**
  * Interface for the seller repository.
  */
