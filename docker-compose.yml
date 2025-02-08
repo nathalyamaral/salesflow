@@ -12,6 +12,12 @@ services:
     depends_on:
       - salesflow_db
       - mailhog
+      - redis
+    environment:
+      CACHE_DRIVER: redis
+      SESSION_DRIVER: redis
+      QUEUE_CONNECTION: redis
+      REDIS_HOST: redis
   salesflow_db:
     image: mysql:8.0
     container_name: salesflow_db
@@ -38,5 +44,17 @@ services:
     restart: unless-stopped
     ports:
       - "6379:6379"
+  queue_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: salesflow_queue_worker
+    restart: unless-stopped
+    depends_on:
+      - salesflow_php
+      - redis
+    volumes:
+      - .:/var/www/html
+    command: [ "/bin/sh", "-c", "sh queue_worker_entrypoint.sh" ]
 volumes:
   db_data:

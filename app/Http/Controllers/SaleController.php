@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterSaleRequest;
 use App\Http\Resources\SaleResource;
+use App\Jobs\ProcessSaleJob;
 use Application\UseCases\RegisterSaleUseCase;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,6 +32,8 @@ class SaleController extends Controller
             $request->validated()['seller_email'],
             $request->validated()['amount']
         );
+
+        ProcessSaleJob::dispatch($sale);
 
         return response()->json(new SaleResource($sale), Response::HTTP_CREATED);
     }
