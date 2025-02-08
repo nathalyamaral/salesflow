@@ -2,6 +2,8 @@
 
 namespace Domain\Repositories;
 
+use Domain\Entities\Sale;
+
 /**
  * Interface for the sale repository.
  */

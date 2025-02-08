@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Http\Resources;
 
+use App\Models\Seller as SellerModel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use Domain\Entities\Seller;
 
 
 /**
@@ -14,9 +14,12 @@ class SaleApiTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function registerSale(): void
+    public function testRegisterSale(): void
     {
-        $seller = Seller::create([ 'name' => 'Fulano Tal', 'email' => 'fulano@example.com' ]);
+        $seller = SellerModel::create([
+            'name' => 'Fulano Tal',
+            'email' => 'fulano@example.com'
+        ]);
 
         $response = $this->postJson('/api/sales', [
             'seller_email' => $seller->email,
