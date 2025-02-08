@@ -2,7 +2,8 @@
 
 namespace App\Providers;
 
-use App\Infrastructure\Persistence\CachedSellerRepository;
+use Infrastructure\Persistence\CachedSaleRepository;
+use Infrastructure\Persistence\CachedSellerRepository;
 use Illuminate\Support\ServiceProvider;
 use Domain\Repositories\SellerRepositoryInterface;
 use Domain\Repositories\SaleRepositoryInterface;
@@ -19,8 +20,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SellerRepositoryInterface::class, function ($app) {
             return new CachedSellerRepository(new EloquentSellerRepository());
         });
-        $this->app->bind(SellerRepositoryInterface::class, EloquentSellerRepository::class);
-        $this->app->bind(SaleRepositoryInterface::class, EloquentSaleRepository::class);
+        $this->app->bind(SaleRepositoryInterface::class, function ($app) {
+            return new CachedSaleRepository(new EloquentSaleRepository());
+        });
     }
 
     /**

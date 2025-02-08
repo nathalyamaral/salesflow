@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Infrastructure\Persistence;
+namespace Infrastructure\Persistence;
 
 use Domain\Entities\Seller;
 use Domain\Repositories\SellerRepositoryInterface;
 use Illuminate\Support\Facades\Cache;
-use Infrastructure\Persistence\EloquentSellerRepository;
 
 /**
  * Implementation of the seller repository with caching using Redis.
@@ -15,6 +14,9 @@ class CachedSellerRepository implements SellerRepositoryInterface
     private const CACHE_KEY_PREFIX = 'seller_';
     private const CACHE_TTL = 600;
 
+    /**
+     * @param EloquentSellerRepository $repository
+     */
     public function __construct(private readonly EloquentSellerRepository $repository)
     {
     }
