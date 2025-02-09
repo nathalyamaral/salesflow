@@ -2,10 +2,12 @@
 
 namespace Infrastructure\Persistence;
 
+use App\Models\Sale as SaleModel;
+use App\Models\Seller as SellerModel;
 use Domain\Entities\Sale;
 use Domain\Entities\Seller;
+use Carbon\Carbon;
 use Domain\Repositories\SaleRepositoryInterface;
-use App\Models\Sale as SaleModel;
 
 class EloquentSaleRepository implements SaleRepositoryInterface
 {
@@ -36,11 +38,15 @@ class EloquentSaleRepository implements SaleRepositoryInterface
      * Return all sale by seller id.
      *
      * @param int $sellerId
+     * @param Carbon|null $date
      * @return Sale[]
      */
-    public function findBySellerId(int $sellerId): array
+    public function findBySellerId(int $sellerId, ?Carbon $date = null): array
     {
         return SaleModel::where('seller_id', $sellerId)
+            ->when($date, function ($query) use ($date) {
+                return $query->whereDate('date', $date->toDateString());
+            })
             ->orderByDesc('created_at')
             ->get()
             ->map(function ($sale) {

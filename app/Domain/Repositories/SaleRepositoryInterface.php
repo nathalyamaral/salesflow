@@ -2,6 +2,7 @@
 
 namespace Domain\Repositories;
 
+use Carbon\Carbon;
 use Domain\Entities\Sale;
 
 /**
@@ -17,7 +18,8 @@ interface SaleRepositoryInterface
 
     /**
      * @param int $sellerId
+     * @param Carbon|null $date
      * @return array
      */
-    public function findBySellerId(int $sellerId): array;
+    public function findBySellerId(int $sellerId, ?Carbon $date = null): array;
 }

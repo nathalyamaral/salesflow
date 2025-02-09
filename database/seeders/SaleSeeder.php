@@ -24,7 +24,7 @@ class SaleSeeder extends Seeder
                 'seller_id' => rand(1, 3),
                 'amount' => rand(100, 1000),
                 'commission' => rand(10, 100),
-                'date' => Carbon::now()->subDays(rand(1, 30)),
+                'date' => Carbon::now(),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ];

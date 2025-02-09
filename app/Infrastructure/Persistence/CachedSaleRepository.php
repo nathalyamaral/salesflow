@@ -2,6 +2,7 @@
 
 namespace Infrastructure\Persistence;
 
+use Carbon\Carbon;
 use Domain\Entities\Sale;
 use Domain\Repositories\SaleRepositoryInterface;
 use Illuminate\Support\Facades\Cache;
@@ -23,16 +24,16 @@ class CachedSaleRepository implements SaleRepositoryInterface
 
     /**
      * @param int $sellerId
+     * @param Carbon|null $date
      * @return array
      */
-    public function findBySellerId(int $sellerId): array
+    public function findBySellerId(int $sellerId, ?Carbon $date = null): array
     {
-        $sales = Cache::remember(self::CACHE_KEY_PREFIX . $sellerId, self::CACHE_TTL, function () use ($sellerId) {
-            $result = $this->repository->findBySellerId($sellerId);
-            return is_array($result) ? $result : [$result];
-        });
+        $cacheKey = $date ? "sales_{$sellerId}_{$date->toDateString()}" : "sales_{$sellerId}_all";
 
-        return is_array($sales) ? $sales : [$sales];
+        return Cache::remember($cacheKey, self::CACHE_TTL, function () use ($sellerId, $date) {
+            return $this->repository->findBySellerId($sellerId, $date);
+        });
     }
 
 

@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Infrastructure\Persistence;
 
+use Carbon\Carbon;
 use DateTime;
 use Domain\Entities\Sale;
 use Domain\Entities\Seller;
@@ -37,12 +38,16 @@ class CachedSaleRepositoryTest extends TestCase
             commission: $seller->getCommission(),
             date: new DateTime('2024-02-07')
         );
+
+        $testDate = new DateTime('2024-02-07');
+        $cacheKeyWithDate = "sales_1_" . $testDate->format('Y-m-d');
+
         Cache::shouldReceive('remember')
             ->once()
-            ->with('sale_1', 1200, \Closure::class)
+            ->with($cacheKeyWithDate, 1200, \Closure::class)
             ->andReturn([$sale]);
 
-        $result = $this->cachedSaleRepository->findBySellerId(1);
+        $result = $this->cachedSaleRepository->findBySellerId(1, Carbon::parse($testDate->format('Y-m-d')));
 
         $this->assertEquals([$sale], $result);
     }
