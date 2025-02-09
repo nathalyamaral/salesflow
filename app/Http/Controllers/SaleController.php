@@ -6,8 +6,10 @@ use App\Http\Requests\RegisterSaleRequest;
 use App\Http\Resources\SaleResource;
 use App\Jobs\ProcessSaleJob;
 use Application\UseCases\RegisterSaleUseCase;
+use Carbon\Carbon;
 use Domain\Repositories\SaleRepositoryInterface;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -24,11 +26,15 @@ class SaleController extends Controller
     /**
      * Get sales by seller id
      * @param int $sellerId
+     * @param Request
      * @return JsonResponse
      */
-    public function listBySeller(int $sellerId): JsonResponse
+    public function listBySeller(int $sellerId, Request $request): JsonResponse
     {
-        $sales = $this->saleRepository->findBySellerId($sellerId);
+        $date = $request->query('date');
+        $carbonDate = $date ? Carbon::parse($date) : null;
+
+        $sales = $this->saleRepository->findBySellerId($sellerId, $carbonDate);
 
         if (empty($sales)) {
             return response()->json(['message' => 'No sales found for this seller'], Response::HTTP_NOT_FOUND);
