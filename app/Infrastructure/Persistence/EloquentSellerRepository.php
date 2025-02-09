@@ -20,28 +20,38 @@ class EloquentSellerRepository implements SellerRepositoryInterface
         );
 
         return new Seller(
-            $sellerModel->id,
-            $sellerModel->name,
-            $sellerModel->email
+            id: $sellerModel->id,
+            name: $sellerModel->name,
+            email: $sellerModel->email
         );
     }
 
     /**
-     * @param string $email
+     * @param string $id
      * @return Seller|null
      */
-    public function findByEmail(string $email): ?Seller
+    public function findById(string $id): ?Seller
     {
-        $sellerModel = SellerModel::where('email', $email)->first();
+        $sellerModel = SellerModel::where('id', $id)->first();
 
         if (!$sellerModel) {
             return null;
         }
 
         return new Seller(
-            $sellerModel->id,
-            $sellerModel->name,
-            $sellerModel->email
+            id: $sellerModel->id,
+            name: $sellerModel->name,
+            email: $sellerModel->email
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function findAll(): array
+    {
+        return SellerModel::all()
+            ->map(fn ($seller) => new Seller($seller->id, $seller->name, $seller->email))
+            ->toArray();
     }
 }

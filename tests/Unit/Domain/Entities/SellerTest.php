@@ -12,7 +12,12 @@ class SellerTest extends TestCase
 {
     public function testCreateSeller(): void
     {
-        $seller = new Seller(1, 'Fulano Tal', 'fulano@example.com', 100.0);
+        $seller = new Seller(
+            id: 1,
+            name: 'Fulano Tal',
+            email: 'fulano@example.com',
+            commission: 100.0
+        );
 
         $this->assertEquals(1, $seller->getId());
         $this->assertEquals('Fulano Tal', $seller->getName());

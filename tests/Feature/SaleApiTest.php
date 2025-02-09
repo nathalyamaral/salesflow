@@ -15,11 +15,11 @@ class SaleApiTest extends TestCase
     public function testRegisterSaleNotInvalid(): void
     {
         $response = $this->postJson('/api/sales', [
-            'seller_email' => 'not-exists@example.com',
+            'sellerId' => '0',
             'amount' => -10
         ]);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['seller_email', 'amount']);
+            ->assertJsonValidationErrors(['sellerId', 'amount']);
     }
 }

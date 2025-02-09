@@ -13,3 +13,4 @@ storage/framework/*
 storage/accesstage-local/*
 .phpintel/
 tests/cover/*
+coverage-report
