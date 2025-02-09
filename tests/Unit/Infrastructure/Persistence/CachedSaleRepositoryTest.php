@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Infrastructure\Persistence;
 
+use DateTime;
 use Domain\Entities\Sale;
 use Domain\Entities\Seller;
 use Infrastructure\Persistence\CachedSaleRepository;
@@ -19,16 +20,26 @@ class CachedSaleRepositoryTest extends TestCase
         parent::setUp();
 
         $this->eloquentSaleRepository = $this->createMock(EloquentSaleRepository::class);
-        $this->cachedSaleRepository = new CachedSaleRepository($this->eloquentSaleRepository);
+        $this->cachedSaleRepository = new CachedSaleRepository(repository: $this->eloquentSaleRepository);
     }
 
     public function testFindBySellerIdCachedSales(): void
     {
-        $seller = new Seller(1, 'Fulano Tal', 'fulano@example.com');
-        $sale = new Sale(1, $seller, 500.0, 50.0, now());
+        $seller = new Seller(
+            id: 1,
+            name: 'Fulano Tal',
+            email: 'fulano@example.com'
+        );
+        $sale = new Sale(
+            id: 1,
+            seller: $seller,
+            amount: 500.0,
+            commission: $seller->getCommission(),
+            date: new DateTime('2024-02-07')
+        );
         Cache::shouldReceive('remember')
             ->once()
-            ->with('sale_1', 600, \Closure::class)
+            ->with('sale_1', 1200, \Closure::class)
             ->andReturn([$sale]);
 
         $result = $this->cachedSaleRepository->findBySellerId(1);
@@ -38,8 +49,18 @@ class CachedSaleRepositoryTest extends TestCase
 
     public function testCachedStoreSale(): void
     {
-        $seller = new Seller(1, 'Fulano Tal', 'fulano@example.com');
-        $sale = new Sale(1, $seller, 500.0, 50.0, now());
+        $seller = new Seller(
+            id: 1,
+            name: 'Fulano Tal',
+            email: 'fulano@example.com'
+        );
+        $sale = new Sale(
+            id: 1,
+            seller: $seller,
+            amount: 500.0,
+            commission: $seller->getCommission(),
+            date: new DateTime('2024-02-07')
+        );
 
         $this->eloquentSaleRepository
             ->expects($this->once())
@@ -49,7 +70,7 @@ class CachedSaleRepositoryTest extends TestCase
 
         Cache::shouldReceive('put')
             ->once()
-            ->with('sale_1', $sale, 600);
+            ->with('sale_1', $sale, 1200);
 
         $result = $this->cachedSaleRepository->save($sale);
 

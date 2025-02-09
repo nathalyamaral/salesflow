@@ -18,6 +18,7 @@ services:
       SESSION_DRIVER: redis
       QUEUE_CONNECTION: redis
       REDIS_HOST: redis
+      XDEBUG_MODE: coverage
   salesflow_db:
     image: mysql:8.0
     container_name: salesflow_db

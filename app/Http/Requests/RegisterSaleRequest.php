@@ -27,7 +27,7 @@ class RegisterSaleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'seller_email' => 'required|email|exists:sellers,email',
+            'sellerId' => 'required|integer|exists:sellers,id',
             'amount' => 'required|numeric|min:0.01',
         ];
     }

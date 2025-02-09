@@ -17,12 +17,13 @@ class SaleApiTest extends TestCase
     public function testRegisterSale(): void
     {
         $seller = SellerModel::create([
+            'id' => 1,
             'name' => 'Fulano Tal',
             'email' => 'fulano@example.com'
         ]);
 
         $response = $this->postJson('/api/sales', [
-            'seller_email' => $seller->email,
+            'sellerId' => $seller->id,
             'amount' => 500.0
         ]);
 

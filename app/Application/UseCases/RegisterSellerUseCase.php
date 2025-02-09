@@ -11,7 +11,8 @@ use Domain\Entities\Seller;
 class RegisterSellerUseCase
 {
     public function __construct(
-        private readonly SellerRepositoryInterface $repository) {
+        private readonly SellerRepositoryInterface $repository
+    ) {
     }
 
     /**

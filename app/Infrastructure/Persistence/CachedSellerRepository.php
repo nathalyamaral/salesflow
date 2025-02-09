@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Cache;
 class CachedSellerRepository implements SellerRepositoryInterface
 {
     private const CACHE_KEY_PREFIX = 'seller_';
-    private const CACHE_TTL = 600;
+    private const CACHE_TTL = 1200;
 
     /**
      * @param EloquentSellerRepository $repository
@@ -22,13 +22,13 @@ class CachedSellerRepository implements SellerRepositoryInterface
     }
 
     /**
-     * @param string $email
+     * @param string $id
      * @return Seller|null
      */
-    public function findByEmail(string $email): ?Seller
+    public function findById(string $id): ?Seller
     {
-        return Cache::remember(self::CACHE_KEY_PREFIX . $email, self::CACHE_TTL, function () use ($email) {
-            return $this->repository->findByEmail($email);
+        return Cache::remember(self::CACHE_KEY_PREFIX . $id, self::CACHE_TTL, function () use ($id) {
+            return $this->repository->findById($id);
         });
     }
 
@@ -39,7 +39,51 @@ class CachedSellerRepository implements SellerRepositoryInterface
     public function save(Seller $seller): Seller
     {
         $savedSeller = $this->repository->save($seller);
-        Cache::put(self::CACHE_KEY_PREFIX . $savedSeller->getEmail(), $savedSeller, self::CACHE_TTL);
+        $cached = Cache::get('sellers_all');
+        $sellers = $cached ? json_decode($cached, true) : [];
+
+        $sellers[] = [
+            'id' => $seller->getId(),
+            'name' => $seller->getName(),
+            'email' => $seller->getEmail()
+        ];
+
+        Cache::put('sellers_all', json_encode($sellers), self::CACHE_TTL);
         return $savedSeller;
+    }
+
+    /**
+     * @return array
+     */
+    public function findAll(): array
+    {
+        $cached = Cache::get('sellers_all');
+
+        if ($cached) {
+            $decoded = json_decode($cached, true) ?? [];
+
+            return array_map(
+                fn ($seller) => new Seller(
+                    id: $seller['id'],
+                    name: $seller['name'],
+                    email: $seller['email']
+                ),
+                $decoded
+            );
+        }
+
+        $sellers = $this->repository->findAll();
+
+        if (!empty($sellers)) {
+            $sellersArray = array_map(fn ($seller) => [
+                'id' => $seller->getId(),
+                'name' => $seller->getName(),
+                'email' => $seller->getEmail()
+            ], $sellers);
+
+            Cache::put('sellers_all', json_encode($sellersArray), self::CACHE_TTL);
+        }
+
+        return $sellers;
     }
 }

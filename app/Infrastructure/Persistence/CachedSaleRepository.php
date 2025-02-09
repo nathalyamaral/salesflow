@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Cache;
 class CachedSaleRepository implements SaleRepositoryInterface
 {
     private const CACHE_KEY_PREFIX = 'sale_';
-    private const CACHE_TTL = 600;
+    private const CACHE_TTL = 1200;
 
     /**
      * @param EloquentSaleRepository $repository
@@ -32,7 +32,7 @@ class CachedSaleRepository implements SaleRepositoryInterface
             return is_array($result) ? $result : [$result];
         });
 
-        return is_array($sales) ? $sales : [$sales]; // ✅ Se o cache retornou um objeto único, transforma em array
+        return is_array($sales) ? $sales : [$sales];
     }
 
 

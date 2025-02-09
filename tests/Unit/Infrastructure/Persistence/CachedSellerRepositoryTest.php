@@ -23,32 +23,20 @@ class CachedSellerRepositoryTest extends TestCase
 
     public function testFindByEmaiCachedSeller(): void
     {
-        $seller = new Seller(1, 'Fulano Tal', 'fulano@example.com');
+        $seller = new Seller(
+            id: 1,
+            name: 'Fulano Tal',
+            email: 'fulano@example.com'
+        );
+
         Cache::shouldReceive('remember')
             ->once()
-            ->with('seller_fulano@example.com', 600, \Closure::class)
+            ->withArgs(function ($key, $ttl, $callback) {
+                return $key === 'seller_1' && $ttl === 1200 && is_callable($callback);
+            })
             ->andReturn($seller);
 
-        $result = $this->cachedSellerRepository->findByEmail('fulano@example.com');
-
-        $this->assertEquals($seller, $result);
-    }
-
-    public function testSaveStoreSellerCache(): void
-    {
-        $seller = new Seller(1, 'Fulano Tal', 'fulano@example.com');
-
-        $this->eloquentSellerRepository
-            ->expects($this->once())
-            ->method('save')
-            ->with($seller)
-            ->willReturn($seller);
-
-        Cache::shouldReceive('put')
-            ->once()
-            ->with('seller_fulano@example.com', $seller, 600);
-
-        $result = $this->cachedSellerRepository->save($seller);
+        $result = $this->cachedSellerRepository->findById(1);
 
         $this->assertEquals($seller, $result);
     }

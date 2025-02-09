@@ -21,15 +21,15 @@ class RegisterSaleUseCase
     /**
      * Registers a sale made by a seller.
      *
-     * @param string $sellerEmail
+     * @param integer $sellerId
      * @param float $amount
      *
      * @throws \Exception If the seller is not found.
      * @return Sale
      */
-    public function execute(string $sellerEmail, float $amount): Sale
+    public function execute(string $sellerId, float $amount): Sale
     {
-        $seller = $this->sellerRepository->findByEmail($sellerEmail);
+        $seller = $this->sellerRepository->findById($sellerId);
 
         if (!$seller) {
             throw new \Exception("Seller not found");

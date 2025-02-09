@@ -16,8 +16,8 @@ interface SellerRepositoryInterface
     public function save(Seller $seller): Seller;
 
     /**
-     * @param string $email
+     * @param string $id
      * @return Seller|null
      */
-    public function findByEmail(string $email): ?Seller;
+    public function findById(string $id): ?Seller;
 }

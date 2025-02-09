@@ -17,9 +17,15 @@ class RegisterSellerUseCaseTest extends TestCase
         $repository = $this->createMock(SellerRepositoryInterface::class);
         $repository->expects($this->once())
             ->method('save')
-            ->willReturn(new Seller(1, 'Fulano Tal', 'fulano@example.com'));
+            ->willReturn(
+                new Seller(
+                    id: 1,
+                    name: 'Fulano Tal',
+                    email: 'fulano@example.com'
+                )
+            );
 
-        $useCase = new RegisterSellerUseCase($repository);
+        $useCase = new RegisterSellerUseCase(repository: $repository);
         $seller = $useCase->execute('Fulano Tal', 'fulano@example.com');
 
         $this->assertInstanceOf(Seller::class, $seller);
