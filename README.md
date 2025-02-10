@@ -1,129 +1,102 @@
-# README - SalesFlow
+# SalesFlow
 
-## 🚀 Sobre o Projeto
-SalesFlow é uma API desenvolvida em **Laravel**, utilizando a arquitetura **DDD + Hexagonal**, seguindo **PSR-1 e PSR-12**, **Clean Code**, **SOLID**, com ambiente totalmente **Dockerizado** e testes automatizados com **PHPUnit + Code Coverage**.
+SalesFlow é uma aplicação full-stack para gestão de vendas e vendedores. O backend é construído com Laravel e o frontend utiliza Vue.js. A aplicação é totalmente dockerizada e conta com suporte a filas, cache e jobs assíncronos.
 
-## 📦 Tecnologias Utilizadas
-- **Laravel 10** (Framework PHP)
-- **Docker + Docker Compose** (Ambiente isolado)
-- **MySQL 8** (Banco de Dados)
-- **MailHog** (Teste de e-mails)
-- **PHPUnit + Pest** (Testes automatizados)
-- **PHPStan + PHP-CS-Fixer** (Análise estática e formatação de código)
+## Tecnologias Utilizadas
 
----
+### Backend:
+- **Linguagem**: PHP 8.2
+- **Framework**: Laravel
+- **Banco de Dados**: MySQL 8
+- **Servidor Web**: Apache
+- **Sistema de Filas**: Redis + Laravel Queue
+- **Cache**: Redis
+- **Jobs Assíncronos**: Laravel Queues
+- **Serviço de E-mail**: MailHog (para desenvolvimento)
+- **Docker**: Contêinerização completa para facilitar o ambiente de desenvolvimento
 
-## 🔧 Instalação e Configuração
-### **1️⃣ Pré-requisitos**
-Antes de começar, certifique-se de ter instalado:
-- [Docker](https://www.docker.com/)
-- [Docker Compose](https://docs.docker.com/compose/install/)
-- [Git](https://git-scm.com/)
+### Frontend:
+- **Framework**: Vue.js 3 + Vite
+- **Gerenciador de Rotas**: Vue Router
+- **Consumo de API**: Fetch API
+- **Estilização**: CSS puro
 
-### **2️⃣ Clonar o repositório**
+## APIs Implementadas
+A API do SalesFlow fornece os seguintes endpoints:
+
+### **Vendedores**
+- `POST /api/sellers` - Cadastra um novo vendedor
+- `GET /api/sellers` - Lista todos os vendedores
+
+### **Vendas**
+- `POST /api/sales` - Cadastra uma nova venda
+- `GET /api/sales/{seller_id}` - Lista todas as vendas de um vendedor
+- `GET /api/sales/{seller_id}?date=YYYY-MM-DD` - Lista as vendas de um vendedor filtrando por data
+
+### **Relatórios**
+- Um job é executado diariamente às 23h59 para enviar por e-mail um relatório com a soma das vendas do dia para cada vendedor.
+- O job pode ser disparado manualmente através da interface no frontend.
+
+## Testes e Conformidade com Padrões
+O projeto segue as boas práticas de desenvolvimento, incluindo:
+- **Testes Unitários** e **Testes de Integração**
+- **Cobertura de Código** com PHPUnit
+- **Conformidade com PSR-12** para padronização do código
+
+### Comandos para Rodar os Testes e Verificar Conformidade
 ```bash
-git clone SEU_REPOSITORIO.git
+# Rodar testes unitários e de integração
+composer test
+
+# Gerar relatório de cobertura de código
+composer coverage
+
+# Verificar conformidade com PSR-12
+composer lint
+
+# Corrigir automaticamente problemas de PSR-12
+composer fix-lint
+```
+
+## Instruções de Execução
+
+### 1. Clonar o Repositório
+```bash
+git clone https://github.com/seu-usuario/salesflow.git
 cd salesflow
 ```
 
-### **3️⃣ Executar o Setup**
-O projeto possui um **script automatizado** para instalação e configuração:
+### 2. Configurar Permissões no Script de Setup
+Antes de executar o script de setup, conceda permissões de execução:
 ```bash
-chmod +x setup
-./setup
+chmod +x setup.sh
 ```
 
-Isso fará:
-✅ Subir os containers Docker.
-✅ Instalar as dependências do Laravel.
-✅ Criar o banco de dados e rodar migrações.
-✅ Gerar a chave de aplicação e limpar o cache.
-
----
-
-## 🚀 Executando o Projeto
-Após rodar o `setup`, a API estará disponível em:
-🔗 **http://localhost:8000**
-
-📬 **Mailhog (Testar e-mails)**: [http://localhost:8025](http://localhost:8025)
-
----
-
-## 🔍 Rodando Testes e Code Coverage
-Para rodar os testes e gerar o relatório de cobertura de código:
+### 3. Rodar o Script de Setup
+Esse script irá:
+- Criar e subir os containers Docker
+- Instalar dependências do backend e frontend
+- Copiar arquivos `.env`
+- Rodar migrações e seeders
 ```bash
-docker exec -it salesflow_app php artisan test --coverage-html=storage/coverage
+./setup.sh
 ```
-Acesse o relatório gerado:
+
+### 4. Acessar a Aplicação
+Após a execução do script, os serviços estarão disponíveis nos seguintes endereços:
+- **Frontend**: http://localhost:5173/
+- **Backend**: http://localhost:8000/
+- **MailHog** (para visualizar e-mails enviados): http://localhost:8025/
+
+### 5. Testando a API
+Para testar as APIs, pode-se utilizar ferramentas como Insomnia, Postman ou simplesmente cURL no terminal.
+
+### 6. Executando Jobs Manualmente
+Para rodar o job de envio de relatório manualmente, acesse a interface no frontend e clique no botão correspondente ou execute o seguinte comando dentro do container do backend:
 ```bash
-xdg-open storage/coverage/index.html # Para Linux
-open storage/coverage/index.html     # Para macOS
+docker exec -it salesflow_backend php artisan queue:work
 ```
 
 ---
 
-## 📜 Estrutura do Projeto (DDD + Hexagonal)
-```
-app/
-├── Application/        # Casos de uso e regras de aplicação
-│   ├── UseCases/
-│   ├── DTOs/
-│   ├── Services/
-│
-├── Domain/             # Entidades e lógica de negócio
-│   ├── Entities/
-│   ├── Repositories/
-│   ├── ValueObjects/
-│
-├── Infrastructure/     # Comunicação externa (DB, Email, Framework)
-│   ├── Persistence/
-│   ├── Mail/
-│   ├── Framework/
-│
-├── Tests/              # Testes unitários e integração
-```
-
----
-
-## 🛠️ Troubleshooting
-Caso o projeto não inicie corretamente, tente:
-```bash
-docker-compose down -v
-./setup
-```
-Se ainda houver problemas, rode manualmente:
-```bash
-docker exec -it salesflow_app php artisan config:clear
-docker exec -it salesflow_app php artisan cache:clear
-docker exec -it salesflow_app php artisan migrate --seed
-```
-
----
-
-## 📌 Configuração Manual (Caso necessário)
-### Criar banco de dados manualmente
-Se o banco não for criado automaticamente:
-```bash
-docker exec -it salesflow_db mysql -u root -proot -e "CREATE DATABASE salesflow;"
-```
-
-### Rodar migrações manualmente
-```bash
-docker exec -it salesflow_app php artisan migrate --seed
-```
-
----
-
-## 📄 Licença
-Este projeto está sob a licença MIT. Sinta-se livre para utilizá-lo e contribuir! 😊
-
----
-
-## 🔥 Contato
-📧 Email: nathalyamaral07@gmail.com
-💼 LinkedIn: [nathaly](https://linkedin.com/in/nathalyamaral)
-
----
-
-## 🚀 Autor
-👩‍💻 Nome do Desenvolvedor - [GitHub](https://github.com/nathalyamaral)
+Este README fornece um guia completo para o setup e execução do projeto. 🚀

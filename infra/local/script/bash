@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-cmd=$@
-docker exec salesflow_php bash -c "$cmd"
