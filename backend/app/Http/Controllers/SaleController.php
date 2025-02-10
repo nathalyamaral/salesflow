@@ -13,7 +13,17 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Controller for managing sales.
+ * @OA\Info(
+ *      title="SalesFlow API",
+ *      version="1.0.0",
+ *      description="Documentação da API de gerenciamento de vendas"
+ * )
+ * @OA\PathItem(path="/api")
+ *
+ * @OA\Tag(
+ *     name="Sales",
+ *     description="Gerenciamento de vendas"
+ * )
  */
 class SaleController extends Controller
 {
@@ -24,7 +34,29 @@ class SaleController extends Controller
     }
 
     /**
-     * Get sales by seller id
+     * @OA\Get(
+     *     path="/api/sales/{sellerId}?date={YYYY-MM-DD}",
+     *     summary="Lista as vendas de um vendedor filtradas por data",
+     *     tags={"Sales"},
+     *     @OA\Parameter(
+     *         name="sellerId",
+     *         in="path",
+     *         required=true,
+     *         description="ID do vendedor",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="date",
+     *         in="query",
+     *         required=false,
+     *         description="Data para filtrar as vendas (YYYY-MM-DD)",
+     *         @OA\Schema(type="string", format="date")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Lista de vendas filtrada por data retornada com sucesso"
+     *     )
+     * )
      * @param int $sellerId
      * @param Request
      * @return JsonResponse
@@ -43,9 +75,24 @@ class SaleController extends Controller
         return response()->json(SaleResource::collection($sales));
     }
 
-
     /**
-     * Registers a new sale.
+     * @OA\Post(
+     *     path="/api/sales",
+     *     summary="Cadastra uma nova venda",
+     *     tags={"Sales"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"seller_id", "amount"},
+     *             @OA\Property(property="seller_id", type="integer", example=1),
+     *             @OA\Property(property="amount", type="number", format="float", example=500.75)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Venda cadastrada com sucesso"
+     *     )
+     * )
      *
      * @param RegisterSaleRequest $request
      * @return JsonResponse

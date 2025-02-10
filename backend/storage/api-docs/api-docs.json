@@ -1,0 +1,146 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "SalesFlow API",
+        "description": "Documentação da API de gerenciamento de vendas",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api": {},
+        "/api/sales/{sellerId}?date={YYYY-MM-DD}": {
+            "get": {
+                "tags": [
+                    "Sales"
+                ],
+                "summary": "Lista as vendas de um vendedor filtradas por data",
+                "operationId": "07efb400a5b555e5ca35f10d744ae6b6",
+                "parameters": [
+                    {
+                        "name": "sellerId",
+                        "in": "path",
+                        "description": "ID do vendedor",
+                        "required": true,
+                        "schema": {
+                            "type": "int"
+                        }
+                    },
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "Data para filtrar as vendas (YYYY-MM-DD)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de vendas filtrada por data retornada com sucesso"
+                    }
+                }
+            }
+        },
+        "/api/sales": {
+            "post": {
+                "tags": [
+                    "Sales"
+                ],
+                "summary": "Cadastra uma nova venda",
+                "operationId": "51f42c056032d143981f26f6c0888f24",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "seller_id",
+                                    "amount"
+                                ],
+                                "properties": {
+                                    "seller_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "amount": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 500.75
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Venda cadastrada com sucesso"
+                    }
+                }
+            }
+        },
+        "/api/sellers": {
+            "get": {
+                "tags": [
+                    "Sellers"
+                ],
+                "summary": "Lista todos os vendedores",
+                "operationId": "6768a646cebc6baa1b2396f48fac0e10",
+                "responses": {
+                    "200": {
+                        "description": "Lista de vendedores retornada com sucesso"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Sellers"
+                ],
+                "summary": "Cadastra um novo vendedor",
+                "operationId": "9249d06f0fbe023b9dfb798a4a842da3",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Fulano de Tal"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "fulano@example.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Vendedor cadastrado com sucesso"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Sales",
+            "description": "Gerenciamento de vendas"
+        },
+        {
+            "name": "Sellers",
+            "description": "Sellers"
+        }
+    ]
+}
