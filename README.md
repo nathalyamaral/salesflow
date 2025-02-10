@@ -46,16 +46,12 @@ O projeto segue as boas práticas de desenvolvimento, incluindo:
 ### Comandos para Rodar os Testes e Verificar Conformidade
 ```bash
 # Rodar testes unitários e de integração
-composer test
+cd backend
+./composer test
 
 # Gerar relatório de cobertura de código
-composer coverage
-
-# Verificar conformidade com PSR-12
-composer lint
-
-# Corrigir automaticamente problemas de PSR-12
-composer fix-lint
+cd backend
+./composer coverage
 ```
 
 ## Instruções de Execução
