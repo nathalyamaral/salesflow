@@ -95,4 +95,156 @@ docker exec -it salesflow_backend php artisan queue:work
 
 ---
 
+## 📖 Documentação da API (Swagger)
+
+A API do SalesFlow segue o padrão OpenAPI 3.0 e possui uma documentação interativa gerada com Swagger.
+Após rodar o setup, acesse:
+
+🔗 **URL:** [http://localhost:8000/api/documentation](http://localhost:8000/api/documentation)
+
+### **Exemplo de Especificação OpenAPI**
+```json
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "SalesFlow API",
+    "description": "Documentação da API do SalesFlow para gestão de vendedores e vendas.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000/api",
+      "description": "Servidor local"
+    }
+  ],
+  "paths": {
+    "/sellers": {
+      "get": {
+        "summary": "Lista todos os vendedores",
+        "operationId": "getSellers",
+        "tags": ["Sellers"],
+        "responses": {
+          "200": {
+            "description": "Lista de vendedores",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Seller"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Cadastra um novo vendedor",
+        "operationId": "createSeller",
+        "tags": ["Sellers"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Seller"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Vendedor cadastrado com sucesso"
+          }
+        }
+      }
+    },
+    "/sales/{seller_id}": {
+      "get": {
+        "summary": "Lista todas as vendas de um vendedor",
+        "operationId": "getSalesBySeller",
+        "tags": ["Sales"],
+        "parameters": [
+          {
+            "name": "seller_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Filtra as vendas por data (YYYY-MM-DD)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de vendas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Sale"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Seller": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        }
+      },
+      "Sale": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "seller_id": {
+            "type": "integer"
+          },
+          "amount": {
+            "type": "number",
+            "format": "float"
+          },
+          "commission": {
+            "type": "number",
+            "format": "float"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  }
+}
+
 Este README fornece um guia completo para o setup e execução do projeto. 🚀

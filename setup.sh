@@ -58,6 +58,11 @@ docker exec -it salesflow_frontend sh -c 'npm run build'
 echo "🌍 Iniciando frontend..."
 docker exec -it salesflow_frontend sh -c 'npm run dev &'
 
+# Gerando documentação Swagger
+echo "📖 Gerando documentação da API..."
+docker exec -it salesflow_backend php artisan l5-swagger:generate
+
+
 # Finalizando
 echo "✅ Setup finalizado com sucesso! O projeto está pronto para uso."
 echo "🌍 Backend rodando em http://localhost:8000"
