@@ -58,7 +58,7 @@ cd backend
 
 ### 1. Clonar o Repositório
 ```bash
-git clone https://github.com/seu-usuario/salesflow.git
+git clone https://github.com/nathalyamaral/salesflow.git
 cd salesflow
 ```
 
